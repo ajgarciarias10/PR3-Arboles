@@ -57,11 +57,6 @@ VDinamico<Aeropuerto*> VuelaFlight::buscarAeropuertoPais(std::string pais) {
  * @param aerolin
  */
 void VuelaFlight::addNuevaRuta( Aeropuerto* AerOrig, Aeropuerto* AerDest, std::string aerolin) {
-
-
-    /*if (posOrig == -1)
-        throw std::invalid_argument("Error::addNuevaRuta::El aero puerto de origen no existe");*/
-
     Ruta ruta(aerolin,AerDest,AerOrig);
     rutas.insertaFin(ruta);
 

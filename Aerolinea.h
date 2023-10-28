@@ -3,21 +3,26 @@
 #include <string>
 #include "VDinamico.h"
 #include "Ruta.h"
+#include "ListaEnlazada.h"
+using  namespace  std;
 class Ruta;
 class Aerolinea {
 private:
     unsigned int id;
-    std::string icao;
-    std::string nombre;
-    std::string pais;
+    string icao;
+    string nombre;
+    string pais;
     bool activo;
-    VDinamico<Ruta*> ruta;
+    VDinamico<Ruta*> aerorutas;
 public:
     Aerolinea();
     Aerolinea(const Aerolinea &orig);
     ~Aerolinea();
 
-    VDinamico<Aeropuerto>& getAeropuertosOrig();
+    //TODO
+    VDinamico<Aeropuerto*>getAeropuertosOrig();
+    VDinamico<Ruta*> getRutasAeropuerto(string iataAirport);
+    void linkAerolRuta(Ruta r);
 };
 
 

@@ -2,7 +2,7 @@
 #include "VDinamico.h"
 #include "Aeropuerto.h"
 #include "Ruta.h"
-
+#include "AVL.h"
 #ifndef PRACTICA_2_VUELAFLIGHT_H
 #define PRACTICA_2_VUELAFLIGHT_H
 
@@ -12,13 +12,12 @@ class VuelaFlight {
 public:
     VDinamico<Aeropuerto> aeropuertos;
     ListaEnlazada<Ruta> rutas;
+    AVL<Aerolinea> work;
 public:
     const VDinamico<Aeropuerto> &getAeropuertos() const;
     void setAeropuertos( VDinamico<Aeropuerto> &aeropuertos);
     const ListaEnlazada<Ruta> &getRutas() const;
     void setRutas(const ListaEnlazada<Ruta> &rutas);
-
-
 public:
     //Constructor por defecto
     VuelaFlight();
