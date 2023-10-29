@@ -13,19 +13,17 @@ public:
     //Constructor por defecto de nodo
     Nodo():izq(nullptr),der(nullptr){}
     //Constructor parametrizado de nodo
-    Nodo(T &dato): izq(nullptr),der(nullptr),dato(dato){}
+    Nodo(const T &dato): izq(nullptr),der(nullptr),dato(dato){}
 };
-
 template<class T>
 class AVL {
 private:
+    //Raiz del arbol
     Nodo<T> *raiz;
-    //Funcion privada busca recrusiva elemento en el arbol
-    Nodo<T>* buscaRec(T &ele, Nodo<T> *p);
     //Recorre en Inorden
     void inorden(Nodo<T> *p, int nivel, VDinamico<T*> &v);
     //Funcion insertarDatoPrivado
-    int insertaDato(T &ele, Nodo<T>* &p);
+    int insertaDato(const T &ele, Nodo<T>* &p);
     //Funcion  privada rotar izquierda
     void rotIzq(Nodo<T>* &p);
     //Funcion privada rotar derecha
@@ -34,6 +32,8 @@ private:
     void borraArbol(Nodo<T>* nodoABorrar);
     //Constructor copia privado
     Nodo<T>*  copiaAVL(const Nodo<T> &orig) ;
+    //Metodo buscarClave privadp
+    Nodo<T> *buscaClave(const T &ele,Nodo<T> *p);
 public:
     int tama;
     //Constructor por defecto
@@ -43,17 +43,24 @@ public:
     //Operator =
     AVL<T>& operator=(const AVL<T>& orig);
     //Recorre publico en Inorden
-    void recorreInorden() { inorden(raiz,0); }
-    //Funcion publica busca elemento iterativa en el arbol
-    bool buscaIT(T &ele, T &result);
+    VDinamico<T*> recorreInorden() {
+        //Vector de aeropuertos ya ordenado
+        VDinamico<T*> vaerolinea;
+        //Lo envio a ordenar
+        inorden(raiz,0,vaerolinea);
+        //Tras ordenarse
+        return vaerolinea;
+    }
     //Metodo de inserccion de un dato
-    bool insertar (T &ele);
+    bool insertar (const T &ele);
     //Obtenemos el numero de elementos del arbol
     unsigned int numElementos(Nodo<T> *p, int nivel);
     //Obtengo la altura del árbol
     unsigned int altura(Nodo<T> *nodo);
     //Destructor de AVL
     ~AVL(){ borraArbol(raiz);};
+    //Metodo de busquedaRecursiva
+    T* busquedaRecursiva(const T &ele);
 };
 
 /**
@@ -173,26 +180,17 @@ void AVL<T>::rotIzq(Nodo<T>* &p){
  * @return
  */
 template<typename T>
-bool AVL<T>::insertar(T &ele) {
-    return insertaDato(ele, raiz);
+bool AVL<T>::insertar(const T &ele) {
+    //Vemos si el dato esta repetido
+    if(!busquedaRecursiva(ele)){
+        //Inserto el dato si la busqueda recursiva es nula
+        insertaDato(ele,raiz);
+        return true;
+    }
+    //Si esta repetido
+    return false;
 }
-/**
- * @brief Busca Clave Recursiva
- * @tparam T 
- * @param ele 
- * @param p 
- * @return 
- */
-template <class T>
-Nodo<T> *AVL<T>::buscaRec (T &ele, Nodo<T> *p){
-    if (!p)
-        return 0;
-    else if (ele < p->dato)
-        return buscaRec (ele, p->izq);
-    else if (ele > p-> dato)
-        return buscaRec (ele, p->der);
-    else return p;
-}
+
 /***
  * @brief Metodo que recorre en Innorden
  * @post Empieza por los nodos de la izquierda luego llega al raiz y por ultimo se mete en los nodos de la derecha
@@ -201,7 +199,7 @@ Nodo<T> *AVL<T>::buscaRec (T &ele, Nodo<T> *p){
  * @param nivel
  */
 template <class T>
-void AVL<T>::inorden (Nodo<T> *p, int nivel, VDinamico<T*> &vaerolinea){
+void AVL<T>::inorden (Nodo<T> *p, int nivel,  VDinamico<T*>& vaerolinea){
     if (p){
         //Recorremos primero por la izquierda aumentando profundidad hasta llegar a null
         inorden (p->izq, nivel+1,vaerolinea);
@@ -224,7 +222,7 @@ void AVL<T>::inorden (Nodo<T> *p, int nivel, VDinamico<T*> &vaerolinea){
  * @return
  */
 template <class  T>
-int AVL<T>::insertaDato(T &dato, Nodo<T> *&c) {
+int AVL<T>::insertaDato(const T &dato, Nodo<T> *&c) {
     Nodo<T> *p = c;
         int deltaH = 0;
         if (!p){
@@ -232,20 +230,20 @@ int AVL<T>::insertaDato(T &dato, Nodo<T> *&c) {
             c = p; deltaH=1;
         }
         else if (dato > p->dato){
-            if (inserta(p->der, dato)){
+            if (insertaDato(dato, p->der)){
                 p->bal--;
                 if (p->bal == -1) deltaH=1;
                 else if (p->bal == -2) {
-                    if (p->der->bal == 1) rotDecha(p->der);
-                    rotIzqda(c);
+                    if (p->der->bal == 1) rotDer(p->der);
+                    rotIzq(c);
                 } } }
         else if (dato < p->dato){
-            if (inserta(p->izq, dato)){
+            if (insertaDato(dato, p->izq)){
                 p->bal++;
                 if (p->bal==1) deltaH = 1;
                 else if (p->bal == 2){
-                    if (p->izq->bal == -1) rotIzqda(p->izq);
-                    rotDecha(c);
+                    if (p->izq->bal == -1) rotIzq(p->izq);
+                    rotDer(c);
                 } } }
         return deltaH;
 
@@ -295,22 +293,39 @@ unsigned int AVL<T>::altura(Nodo<T> *nodo) {
     }else{
         return 0;
     }
+
 }
 /**
- * @brief Metodo que busca iterativamente. llamando a la busqueda recursiva
+ * @brief Metodo que busca la clave dentro de un árbol, privado
  * @tparam T
  * @param ele
- * @param result
+ * @param p
  * @return
  */
-template <class T>
-bool AVL<T>::buscaIT (T &ele, T &result){
-    Nodo<T> *p = buscaRec(ele, raiz);
+template <class T> // función privada
+Nodo<T> *AVL<T>::buscaClave (const T &ele, Nodo<T> *p){
+    if (!p)
+        return 0;
+    else if (ele < p->dato)
+        return buscaClave (ele, p->izq);
+    else if (ele > p-> dato)
+        return buscaClave (ele, p->der);
+    else return p;
+}
+
+template<class T>
+T*  AVL<T>::busquedaRecursiva(const T &ele) {
+    Nodo<T> *p = buscaClave (ele, raiz);
+    //En caso de que se encuentre
     if (p) {
-        result = p->dato;
-        return true;
+        //Devolvemos la direccion de memoria tras la busqueda
+        return  &(p->dato);
     }
-    return false;
+    //En caso de no encontrar nada devolvemos nullptr
+    return nullptr;
+
+
+
 }
 
 

@@ -1,88 +1,104 @@
 #include "VuelaFlight.h"
 /**
- * @brief Destructor
+ * @brief VuelaFlight
  */
-VuelaFlight::~VuelaFlight(){}
+VuelaFlight::VuelaFlight() :aeropuertos(),rutas() {}
 /**
- * @brief Constructor por defecto
+ * @brief Constructor parametrizado
+ * @param vector
+ * @param ruta
  */
-VuelaFlight::VuelaFlight():aeropuertos(),rutas(){}
+VuelaFlight::VuelaFlight(VDinamico<Aeropuerto> vector, ListaEnlazada<Ruta> ruta):aeropuertos(vector),rutas(ruta) {}
 /**
- * @brief Constructor Copia
- * @param vl
+ * @brief BuscarRutasOrigenDestino
+ * @param idAerOrig
+ * @param idAerDest
+ * @return
  */
-VuelaFlight::VuelaFlight(const VuelaFlight &orig):aeropuertos(orig.aeropuertos),rutas(orig.rutas){}
-
-Ruta &VuelaFlight::buscarRutasOriDes(std::string idOrigen, std::string idDestino) {
+Ruta &VuelaFlight::buscarRutasOriDeS(string idAerOrig, string idAerDest) {
     ListaEnlazada<Ruta>::Iterador i;
-    for (i=rutas.iterador();!i.fin();i.siguiente()) {
-        if(i.dato().getOrigen()->getIata()==idOrigen && i.dato().getDestino()->getIata()==idDestino)
+    //Recorremos todos los aeropuertos
+    for(i = rutas.iterador();!i.fin();i.siguiente()){
+        //Obtenemos los datos
+        string origenBusq = i.dato().getOrigen()->getIata();
+        string destinoBusq = i.dato().getDestino()->getIata();
+        //En caso de que se encuentre
+        if(origenBusq==idAerOrig && destinoBusq==idAerDest)
+            //Devolvemos el dato
             return i.dato();
     }
-    throw std::invalid_argument("VuelaFlight:: buscarRutasOriDes:: No hay ninguna ruta mencionada");
+    throw std::invalid_argument("La ruta no ha sido encontrado" "\n" "Intente cambiar su origen y destino" );
 }
 /**
  * @brief BuscarRutasOrigen
- * @param idOrigen
+ * @param idAerOrig
  * @return
  */
-ListaEnlazada<Ruta*> VuelaFlight::buscarRutasOrigen(std::string idOrigen) {
+ListaEnlazada<Ruta *> VuelaFlight::buscarRutasOrigen(string idAerOrig) {
     ListaEnlazada<Ruta>::Iterador i;
-    ListaEnlazada<Ruta*> lista;
-
-    for (i=rutas.iterador();!i.fin();i.siguiente()) {
-        if(i.dato().getOrigen()->getIata()==idOrigen)
+    ListaEnlazada<Ruta *> lista;
+    //Recorremos todos los aeropuertos
+    for(i = rutas.iterador();!i.fin();i.siguiente()){
+        //Obtenemos los datos
+        string origenBusq = i.dato().getOrigen()->getIata();
+        //En caso de que se encuentre
+        if(origenBusq==idAerOrig){
+            //Devolvemos el dato
             lista.insertaFin(&i.dato());
+        }
     }
-    return lista;
+    return  lista;
+
+
 }
+
 /**
  * @brief Buscar Aeropuerto por Pais
  * @param pais
  * @return
  */
-VDinamico<Aeropuerto*> VuelaFlight::buscarAeropuertoPais(std::string pais) {
-    //Creo un vector para los encontrados
-    VDinamico<Aeropuerto*> encontrados;
-    for (int i = 0; i < aeropuertos.Tamlog(); ++i) {
-        if (aeropuertos[i].getIsoPais()==pais)
-            encontrados.insertar(&(aeropuertos[i]));
+VDinamico<Aeropuerto * > VuelaFlight::buscarAeropuertoPais(string pais) {
+    //Donde lo vamos a meter
+    VDinamico<Aeropuerto*> encontrado;
+    //Recorremos el tamaño fisico
+    for (int i = 0; i < aeropuertos.tamlog(); ++i) {
+        if(aeropuertos[i].getIsoPais() == pais){
+            //Insertamso el vector de aeropuertos
+            encontrado.insertar(&aeropuertos[i]);
+        }
     }
-    return encontrados;
+    return  encontrado;
+
+
 }
 /**
  * @brief Metodo para añadir nueva ruta
- * @param AerOrig
- * @param AerDest
- * @param aerolin
+ * @param idAerOrig
+ * @param idAerDest
+ * @param aerolinea
  */
-void VuelaFlight::addNuevaRuta( Aeropuerto* AerOrig, Aeropuerto* AerDest, std::string aerolin) {
-    Ruta ruta(aerolin,AerDest,AerOrig);
+void VuelaFlight::addNuevaRuta(Aeropuerto *idAerOrig, Aeropuerto * idAerDest, string aerolinea) {
+    Ruta ruta(aerolinea,idAerOrig,idAerDest);
     rutas.insertaFin(ruta);
 
 }
 /**
- * @brief Añade aeropuerto
- * @param orig
+ * @brief Destructor
+ */
+VuelaFlight::~VuelaFlight() {
+}
+/**
+ * @brief Constructor Copia
+ * @param vl
  */
 
-void VuelaFlight::addNuevoAeropuerto(const Aeropuerto &orig) {
-    aeropuertos.insertar(orig);
-}
+VuelaFlight::VuelaFlight(const VuelaFlight &vl) : aeropuertos(vl.aeropuertos), rutas(vl.rutas){}
+/**
+ * @brief Añade aeropuerto
+ * @param aeropuerto
+ */
 
-const VDinamico<Aeropuerto> &VuelaFlight::getAeropuertos() const {
-    return aeropuertos;
-}
+void VuelaFlight::añadeAeropuerto(const Aeropuerto *aeropuerto) {
+    aeropuertos.insertar(*aeropuerto);
 
-void VuelaFlight::setAeropuertos( VDinamico<Aeropuerto> &aeropuertos) {
-    this->aeropuertos= aeropuertos;
 }
-
-const ListaEnlazada<Ruta> &VuelaFlight::getRutas() const {
-    return rutas;
-}
-
-void VuelaFlight::setRutas(const ListaEnlazada<Ruta> &rutas) {
-    VuelaFlight::rutas = rutas;
-}
-

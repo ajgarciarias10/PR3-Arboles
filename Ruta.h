@@ -17,7 +17,7 @@ private:
     string aerolinea;
     Aeropuerto *destination;
     Aeropuerto *origin;
-    Aerolinea *company;
+    //Aerolinea *company;
 public:
     Ruta();
     Ruta(const Ruta &orig);

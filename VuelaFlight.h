@@ -13,29 +13,25 @@ public:
     VDinamico<Aeropuerto> aeropuertos;
     ListaEnlazada<Ruta> rutas;
     AVL<Aerolinea> work;
-public:
-    const VDinamico<Aeropuerto> &getAeropuertos() const;
-    void setAeropuertos( VDinamico<Aeropuerto> &aeropuertos);
-    const ListaEnlazada<Ruta> &getRutas() const;
-    void setRutas(const ListaEnlazada<Ruta> &rutas);
-public:
     //Constructor por defecto
     VuelaFlight();
     //Constructor copia
-    VuelaFlight(const VuelaFlight &orig);
+    VuelaFlight(const VuelaFlight &vl);
+    //Constructor parametrizado
+    VuelaFlight(VDinamico<Aeropuerto> aeropuerto, ListaEnlazada<Ruta> ruta );
     //Destructor VuelaFlight
-    virtual ~VuelaFlight();
+    ~VuelaFlight();
     //Metodos que tenemos que utilizar en esta practica
     //BuscarRutaDeOrigenDestino
-    Ruta& buscarRutasOriDes(std::string idOrigen,std::string idDestino);
+    Ruta& buscarRutasOriDeS(string idAerOrig,string idAerDest);
     //BuscarRutasDeOrigen
-    ListaEnlazada<Ruta*> buscarRutasOrigen (std::string idOrigen);
+    ListaEnlazada<Ruta*> buscarRutasOrigen (string idAerOrig);
     //Buscar AeropuertoPais
-    VDinamico<Aeropuerto*> buscarAeropuertoPais(std::string pais);
+    VDinamico<Aeropuerto*> buscarAeropuertoPais(string pais);
     //AñadirNuevoAeropuerto
-    void addNuevoAeropuerto(const Aeropuerto &orig);
+    void añadeAeropuerto(const Aeropuerto *aeropuerto);
     //AñadirNuevaRuta
-    void addNuevaRuta( Aeropuerto* AerOrig, Aeropuerto* AerDest, std::string aerolin);
+    void addNuevaRuta(Aeropuerto *idAerOrig, Aeropuerto * idAerDest, string aerolinea);
 };
 
 
