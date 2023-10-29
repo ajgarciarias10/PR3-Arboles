@@ -92,7 +92,7 @@ VuelaFlight::~VuelaFlight() {
  * @param vl
  */
 
-VuelaFlight::VuelaFlight(const VuelaFlight &vl) : aeropuertos(vl.aeropuertos), rutas(vl.rutas){}
+VuelaFlight::VuelaFlight(const VuelaFlight &vl) : aeropuertos(vl.aeropuertos), rutas(vl.rutas),work(vl.work){}
 /**
  * @brief Añade aeropuerto
  * @param aeropuerto

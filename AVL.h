@@ -31,7 +31,7 @@ private:
     //Metodo BorraArbol
     void borraArbol(Nodo<T>* nodoABorrar);
     //Constructor copia privado
-    Nodo<T>*  copiaAVL(const Nodo<T> &orig) ;
+    Nodo<T>*  copiaAVL(const Nodo<T> *orig) ;
     //Metodo buscarClave privadp
     Nodo<T> *buscaClave(const T &ele,Nodo<T> *p);
 public:
@@ -61,6 +61,8 @@ public:
     ~AVL(){ borraArbol(raiz);};
     //Metodo de busquedaRecursiva
     T* busquedaRecursiva(const T &ele);
+    //Metodo de busqueda iterativa
+    T* busquedaIterativa(const T &dato);
 };
 
 /**
@@ -76,10 +78,8 @@ AVL<T>::AVL():raiz(nullptr){}
  */
 template<class T>
 AVL<T>::AVL(const AVL<T> &orig) {
-    //Si no es el mismo árbol entonces devolvemos una copia
-    if(this !=orig){
         raiz =  copiaAVL(orig.raiz);
-    }
+
 
 }
 /**
@@ -88,20 +88,12 @@ AVL<T>::AVL(const AVL<T> &orig) {
  * @param orig
  */
 template<class T>
-Nodo<T>* AVL<T> ::copiaAVL(const Nodo<T> &orig){
-    Nodo<T> *nuevaBola;
+Nodo<T>* AVL<T> ::copiaAVL(const Nodo<T> *orig){
+    Nodo<T> *nuevaBola = nullptr;
     if (orig) {
         nuevaBola =new Nodo<T>(*orig);
-        if (orig.izq) {
-            nuevaBola->izq = copiaAVL(orig.izq);
-        }
-        if (orig.der) {
-            nuevaBola->der = copiaAVL(orig.der);
-        }
-    }
-    else{
-        //Devuelve un nulo en caso de que no haya nada que copiar
-        return nullptr;
+            nuevaBola->izq = copiaAVL(orig->izq);
+            nuevaBola->der = copiaAVL(orig->der);
     }
     return nuevaBola;
 }
@@ -324,8 +316,33 @@ T*  AVL<T>::busquedaRecursiva(const T &ele) {
     //En caso de no encontrar nada devolvemos nullptr
     return nullptr;
 
-
-
+}
+/**
+ * @brief Metodo que realiza la busqueda iterativa
+ * @tparam T
+ * @param dato
+ * @return
+ */
+template <class  T>
+T* AVL<T>::busquedaIterativa(const T &dato) {
+    T* buscado;
+    Nodo<T> *p=raiz;
+    while (raiz){
+        //Si el dato es menor nos vamos para la izquierda
+        if (dato<p->dato){
+            p=p->izq;
+        }else {
+            //Si el dato es mayor nos vamos para la derecha
+            if (dato > p->dato) {
+                p - p->der;
+                //Si tampoco esta en la derecha significa que estamos en el resultado
+            } else {
+                buscado = &p->dato;
+                return buscado;
+            }
+        }
+    }
+    return 0;
 }
 
 

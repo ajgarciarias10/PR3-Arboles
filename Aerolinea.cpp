@@ -10,6 +10,9 @@ Aerolinea::Aerolinea():id(0),icao(""),nombre(""),pais(""),activo(false) {}
  * @param orig
  */
 Aerolinea::Aerolinea(const Aerolinea &orig):id(orig.id),icao(orig.icao),nombre(orig.nombre),pais(orig.pais),activo(orig.activo) {}
+
+Aerolinea::Aerolinea(int id, std::string icao, std::string nombre, std::string pais, bool activo):id(id),icao(icao),nombre(nombre),pais(pais),activo(activo) {}
+
 /**
  * @brief Metodo que obtiene los aeropuerto de origen
  * @return
@@ -75,7 +78,7 @@ Aerolinea::~Aerolinea() {
  * @param orig
  * @return
  */
-bool Aerolinea::operator<(const Aerolinea &orig) {
+bool Aerolinea::operator<(const Aerolinea &orig) const {
     return (this->icao<orig.icao);
 
 }
@@ -84,7 +87,7 @@ bool Aerolinea::operator<(const Aerolinea &orig) {
  * @param orig
  * @return
  */
-bool  Aerolinea::operator>(const Aerolinea &orig) {
+bool  Aerolinea::operator>(const Aerolinea &orig) const {
     return (this->icao>orig.icao);
 
 }

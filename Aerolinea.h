@@ -19,6 +19,8 @@ public:
     Aerolinea();
     //Constructor copia
     Aerolinea(const Aerolinea &orig);
+    //Constructor paramerizado
+    Aerolinea(int id, string icao, string nombre ,string pais, bool activo);
     //Destrcutor
     ~Aerolinea();
     //Metodo que devuelve los aeropuertos de origen
@@ -28,9 +30,9 @@ public:
     //Enlaza Aerolina con Aeroroutes
     void linkAerolRuta(Ruta *r);
     //Operator<
-    bool operator<(const Aerolinea &orig);
+    bool operator<(const Aerolinea &orig) const;
     //Operador>
-    bool  operator>(const Aerolinea &orig);
+    bool  operator>(const Aerolinea &orig) const;
 
 
     unsigned int getId() const;
