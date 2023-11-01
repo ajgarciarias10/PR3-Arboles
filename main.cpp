@@ -98,9 +98,9 @@ int main(int argc, const char * argv[]) {
                 //condición ? valor_si_verdadero : valor_si_falso;
                 activo=="Y" ? activoBool = true : activoBool = false;
                 int id = stoi(idAerolineaStr);
+                vl.addAerolinea(*new Aerolinea(id,icao,nombreAero,pais,activoBool));
                 fila = "";
                 columnas.clear();
-                vl.work.insertar(*new Aerolinea(id,icao,nombre,pais,activoBool));
             }
         }
     }
@@ -109,12 +109,11 @@ int main(int argc, const char * argv[]) {
     }
     is.close();
 #pragma  endregion
+
 #pragma region Valores Rutas
-    string aerolinea = "";
+    string icaoRuta = "";
     string  origen2 = "";
     string destino2 = "";
-    Aeropuerto *origen = nullptr;
-    Aeropuerto *destino = nullptr;
 #pragma endregion
 #pragma region Carga Ruta
     clock_t lecturaRutas = clock();
@@ -124,26 +123,13 @@ int main(int argc, const char * argv[]) {
             //¿Se ha leído una nueva fila?
             if (fila != "") {
                 columnas.str(fila);
-                getline(columnas, aerolinea, ';'); //leemos caracteres hasta encontrar y omitir ';'
+                getline(columnas, icaoRuta, ';'); //leemos caracteres hasta encontrar y omitir ';'
                 getline(columnas, origen2, ';'); //leemos caracteres hasta encontrar y omitir ';'
                 getline(columnas, destino2, ';'); //leemos caracteres hasta encontrar y omitir ';'
                 fila = "";
                 columnas.clear();
-                #pragma region Buscar en tiempo logarítmico en  PR2
-                //Declaro un aeropuerto
-                Aeropuerto aero;
-                aero.setIata(origen2);
-                //Compruebo la posicion dentro del vector dinamico en el que esta Tanto la ruta de origen con la de destino
-                //Y así descubro el aeropuerto
-                int posOrigen = vl.aeropuertos.busquedaBinaria(aero);
-                aero.setIata(destino2);
-                int posDest = vl.aeropuertos.busquedaBinaria(aero);
-                if(posOrigen !=-1 && posDest !=-1){
-                    //Añadimos las rutas
-                    vl.addNuevaRuta(&vl.aeropuertos[posOrigen],&vl.aeropuertos[posDest],aerolinea);
-                }
-                #pragma  endregion
-
+                //Añadimos nueva ruta a partir del origen el destino y el icao
+                vl.addNuevaRuta(origen2,destino2,icaoRuta);
             }
         }
 
@@ -154,28 +140,46 @@ int main(int argc, const char * argv[]) {
 
     std::cout << "Tiempo lectura de las rutas: " << ((clock() - lecturaRutas) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
 #pragma endregion
-#pragma region Busca en tiempo logaritmico en PR3
-    AVL<Aerolinea>aerolineaAVL;
-    ListaEnlazada<Ruta *> listaDRutas;
-    ListaEnlazada<Ruta *> :: Iterador i = listaDRutas.iterador();
-
-    //2º Itero la lista de Ruta de Granada hasta encontrar un destion que sea GB
-    while(!i.fin()) {
-        //Busca Aerolinea
-        Aerolinea al;
-        //Seteamos el nombre de la aerolinea
-        al.setNombre(i.dato()->getAerolinea());
-
-        Aerolinea *aerolineaNueva = aerolineaAVL.busquedaRecursiva(al);
-        if(aerolineaNueva){
-            cout<<"FRESQUISIMA LA BUSQUEDA"<<endl;
-
-        }
-        else{
-            cout<<"Pocha"<<endl;
-        }
-        i.siguiente();
+#pragma region Visualiza toda la información de la aerolínea Ryanair, RYR
+    cout<<"--------------------------------------"<<endl;
+    Aerolinea *aerolinea =  vl.buscaAerolinea("RYR");
+     cout<<"Id: "<<aerolinea->getId() <<" Aerolinea: "<< aerolinea->getNombre() <<  " Icao : "
+     <<  aerolinea->getIcao() << " Pais: " << aerolinea->getPais() << endl;
+    cout<<"--------------------------------------"<<endl;
+#pragma endregion
+#pragma  region Muestra todas las aerolíneas activas.
+    VDinamico<Aerolinea*> vectorsito(vl.buscaAerolineasActiva());
+    for (int i = 0; i < vectorsito.tamlog(); ++i) {
+        string activo = " ";
+        vectorsito[i]->isActivo() ? activo = "Si" : activo ="No";
+        cout<< "Id: "<< vectorsito[i]->getId() << " Nombre: "<< vectorsito[i]->getNombre()<< " Pais: " << vectorsito[i]->getPais() <<" Activo: "<< activo <<"\n"<<endl;
+        cout<<"--------------------------------------"<<endl;
     }
 #pragma endregion
+#pragma  region Busca todos los aeropuertos (origen) en los que opera Iberia Airlines, con icao IBE
+
+    Aerolinea *iberiaAirlines = vl.buscaAerolinea("IBE");
+    ListaEnlazada<Ruta>::Iterador i;
+    VDinamico<Aeropuerto*> aeropuertosIbericos;
+    //Recorremos todas las rutas y buscamos la que tenga la Aerolinea Iberia
+    for(i = vl.rutas.iterador();!i.fin();i.siguiente()){
+        //En caso de que se encuentre
+        if(i.dato().getCompany()==iberiaAirlines)
+            aeropuertosIbericos.insertar(i.dato().getOrigin());
+    }
+    //Recorremos los aeropuertos de origen de Iberia
+    for (int j = 0; j < aeropuertosIbericos.tamlog(); ++j) {
+        cout<<"Id: "<<aeropuertosIbericos[j]->getId()<<" Aerolinea: "<< aeropuertosIbericos[j]->getNombre() <<  " Iata : "
+            <<  aeropuertosIbericos[j]->getIata() << " Iso Pais: " << aeropuertosIbericos[j]->getIsoPais() << endl;
+        cout<<"--------------------------------------"<<endl;
+
+    }
+
+
+#pragma  endregion
+#pragma  region   Busca todas las rutas operadas por Iberia Airlines con origen en el aeropuerto de Málaga(AGP).
+
+
+#pragma  endregion
     return 0;
 }

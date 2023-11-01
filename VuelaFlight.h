@@ -18,7 +18,7 @@ public:
     //Constructor copia
     VuelaFlight(const VuelaFlight &vl);
     //Constructor parametrizado
-    VuelaFlight(VDinamico<Aeropuerto> aeropuerto, ListaEnlazada<Ruta> ruta );
+    VuelaFlight(VDinamico<Aeropuerto> aeropuerto, ListaEnlazada<Ruta> ruta ,AVL<Aerolinea> work);
     //Destructor VuelaFlight
     ~VuelaFlight();
     //Metodos que tenemos que utilizar en esta practica
@@ -31,7 +31,13 @@ public:
     //AñadirNuevoAeropuerto
     void añadeAeropuerto(const Aeropuerto *aeropuerto);
     //AñadirNuevaRuta
-    void addNuevaRuta(Aeropuerto *idAerOrig, Aeropuerto * idAerDest, string aerolinea);
+    void addNuevaRuta(string idAerOrig, string idAerDest, string  icaoRuta);
+    //Añade Aerolinea
+    void addAerolinea(Aerolinea &aerolinea);
+    //Buscar Aerolinea por icao
+    Aerolinea *buscaAerolinea(string icaoAerolinea);
+    //Buscar Aerolinea activa
+    VDinamico<Aerolinea*> buscaAerolineasActiva();
 };
 
 

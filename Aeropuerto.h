@@ -5,6 +5,7 @@
 #include "UTM.h"
 #include "stdexcept"
 #include "algorithm"
+using namespace  std;
 
 /**
  * @file Aeropuerto.h
@@ -18,12 +19,12 @@
  */
 class Aeropuerto {
 private:
-    std::string id;
-    std::string iata;
-    std::string tipo;
-    std::string nombre;
-    std::string continente;
-    std::string iso_pais;
+    string id;
+    string iata;
+    string tipo;
+    string nombre;
+    string continente;
+    string iso_pais;
     UTM posicion;
 
 public:

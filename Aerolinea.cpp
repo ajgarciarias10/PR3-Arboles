@@ -24,7 +24,7 @@ VDinamico<Aeropuerto*> Aerolinea::getAeropuertosOrig() {
     AVL<Aeropuerto *> arbolDeAeroOrig;
     //Obtengo del vector dinamico de rutas  los Aeropuertos de Origen
     for (int i = 0; i < aerorutas.tamlog(); ++i) {
-        Aeropuerto *pAeroOrig = aerorutas[i]->getOrigen();
+        Aeropuerto *pAeroOrig = aerorutas[i]->getOrigin();
         if(pAeroOrig){
             //Insertamos los aeropuertos de origen no nulos
             arbolDeAeroOrig.insertar(pAeroOrig);
@@ -51,8 +51,8 @@ VDinamico<Ruta*> Aerolinea::getRutasAeropuerto(std::string iataAirport) {
     VDinamico<Ruta*> vRutasAero;
     //Recorremos las rutas de la aerolinea
     for (int i = 0; i < aerorutas.tamlog(); ++i) {
-        string iataOrig = aerorutas[i]->getOrigen()->getIata();
-        string iataDest = aerorutas[i]->getDestino()->getIata();
+        string iataOrig = aerorutas[i]->getOrigin()->getIata();
+        string iataDest = aerorutas[i]->getDestination()->getIata();
         //Si tiene ese iata  insertamos  la ruta
             if(iataOrig == iataAirport ||iataDest == iataAirport ){
                     vRutasAero.insertar(aerorutas[i]);

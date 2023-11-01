@@ -3,30 +3,30 @@
 Ruta::~Ruta() {
 }
 
-Ruta::Ruta():aerolinea(""),origin(nullptr),destination(nullptr) {}
-Ruta::Ruta(const Ruta &orig) :aerolinea(orig.aerolinea),origin(orig.origin),destination(orig.destination) {}
-Ruta::Ruta(const std::string &aerolinea, Aeropuerto *dest, Aeropuerto *orig) :aerolinea(aerolinea),origin(orig),destination(dest) {}
+Ruta::Ruta():company(nullptr),origin(nullptr),destination(nullptr) {}
+Ruta::Ruta(const Ruta &orig) :company(orig.company),origin(orig.origin),destination(orig.destination) {}
+Ruta::Ruta( Aerolinea  *aerolinea, Aeropuerto *dest, Aeropuerto *orig) :company(aerolinea),origin(orig),destination(dest) {}
 
-const std::string &Ruta::getAerolinea() const {
-    return aerolinea;
-}
-
-void Ruta::setAerolinea(const std::string &aerolinea) {
-    Ruta::aerolinea = aerolinea;
-}
-
-Aeropuerto *Ruta::getDestino() const {
+Aeropuerto *Ruta::getDestination() const {
     return destination;
 }
 
-void Ruta::setDestino(Aeropuerto *destino) {
-    Ruta::destination = destino;
-}
-
-Aeropuerto *Ruta::getOrigen() const {
+Aeropuerto *Ruta::getOrigin()  {
     return origin;
 }
 
-void Ruta::setOrigen(Aeropuerto *origen) {
-    Ruta::origin = origen;
+Aerolinea *Ruta::getCompany()  {
+    return company;
+}
+
+void Ruta::setDestination(Aeropuerto *destination) {
+    Ruta::destination = destination;
+}
+
+void Ruta::setOrigin(Aeropuerto *origin) {
+    Ruta::origin = origin;
+}
+
+void Ruta::setCompany(Aerolinea *company) {
+    Ruta::company = company;
 }

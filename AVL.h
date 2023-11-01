@@ -43,14 +43,7 @@ public:
     //Operator =
     AVL<T>& operator=(const AVL<T>& orig);
     //Recorre publico en Inorden
-    VDinamico<T*> recorreInorden() {
-        //Vector de aeropuertos ya ordenado
-        VDinamico<T*> vaerolinea;
-        //Lo envio a ordenar
-        inorden(raiz,0,vaerolinea);
-        //Tras ordenarse
-        return vaerolinea;
-    }
+    VDinamico<T*> recorreInorden() ;
     //Metodo de inserccion de un dato
     bool insertar (const T &ele);
     //Obtenemos el numero de elementos del arbol
@@ -63,6 +56,10 @@ public:
     T* busquedaRecursiva(const T &ele);
     //Metodo de busqueda iterativa
     T* busquedaIterativa(const T &dato);
+
+    int getTama() const {
+        return tama;
+    }
 };
 
 /**
@@ -191,7 +188,7 @@ bool AVL<T>::insertar(const T &ele) {
  * @param nivel
  */
 template <class T>
-void AVL<T>::inorden (Nodo<T> *p, int nivel,  VDinamico<T*>& vaerolinea){
+void AVL<T>::inorden (Nodo<T> *p, int nivel, VDinamico<T*>& vaerolinea){
     if (p){
         //Recorremos primero por la izquierda aumentando profundidad hasta llegar a null
         inorden (p->izq, nivel+1,vaerolinea);
@@ -344,7 +341,21 @@ T* AVL<T>::busquedaIterativa(const T &dato) {
     }
     return 0;
 }
+/**
+ * @brief Metodo para recorrer en innorden publico que llama al innorden privado
+ * @tparam T
+ * @return
+ */
+template <class  T>
+VDinamico<T*> AVL<T>::recorreInorden() {
+    //Vector de aeropuertos ya ordenado
+    VDinamico<T*> vaerolinea;
+    //Lo envio a ordenar
+    inorden(raiz,0,vaerolinea);
+    //Tras ordenarse
+    return vaerolinea;
 
+}
 
 
 
