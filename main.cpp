@@ -109,7 +109,6 @@ int main(int argc, const char * argv[]) {
     }
     is.close();
 #pragma  endregion
-
 #pragma region Valores Rutas
     string icaoRuta = "";
     string  origen2 = "";
@@ -128,23 +127,45 @@ int main(int argc, const char * argv[]) {
                 getline(columnas, destino2, ';'); //leemos caracteres hasta encontrar y omitir ';'
                 fila = "";
                 columnas.clear();
-                //Añadimos nueva ruta a partir del origen el destino y el icao
-                vl.addNuevaRuta(origen2,destino2,icaoRuta);
+#pragma  region   Buscar en tiempo logarítmico la aerolínea que hace la ruta en VuelaFlight::work
+                Aerolinea aero2;
+                aero2.setIcao(icaoRuta);
+                Aerolinea *aerolineaEncontrada;
+                aerolineaEncontrada = vl.work.busquedaRecursiva(aero2);
+#pragma  endregion
+#pragma region Buscar en tiempo logarítmico en  PR2 + añadir nueva ruta
+                //Declaro un aeropuerto
+                Aeropuerto aero;
+                //Seteo su iata de origen
+                aero.setIata(origen2);
+                //Compruebo la posicion dentro del vector dinamico en el que esta Tanto la ruta de origen con la de destino
+                //Y así descubro el aeropuerto ORIGEN
+                int posOrigen = vl.aeropuertos.busquedaBinaria(aero);
+                //Seteo su iata de destino
+                aero.setIata(destino2);
+                //Y así descubro el aeropuerto destino
+                int posDest = vl.aeropuertos.busquedaBinaria(aero);
+                if(posOrigen !=-1 && posDest !=-1 && aerolineaEncontrada){
+                    //Añadimos nueva ruta a partir del origen el destino y el icao
+                    vl.addNuevaRuta(&vl.aeropuertos[posOrigen],&vl.aeropuertos[posDest],aerolineaEncontrada);
+                }
+
             }
         }
 
     } else{
         std::cout << "Error de apertura en archivo" << std::endl;
     }
+
     is.close();
 
     std::cout << "Tiempo lectura de las rutas: " << ((clock() - lecturaRutas) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
 #pragma endregion
 #pragma region Visualiza toda la información de la aerolínea Ryanair, RYR
     cout<<"--------------------------------------"<<endl;
-    Aerolinea *aerolinea =  vl.buscaAerolinea("RYR");
-     cout<<"Id: "<<aerolinea->getId() <<" Aerolinea: "<< aerolinea->getNombre() <<  " Icao : "
-     <<  aerolinea->getIcao() << " Pais: " << aerolinea->getPais() << endl;
+    Aerolinea aerolinea =  vl.buscaAerolinea("RYR");
+     cout<<"Id: "<<aerolinea.getId() <<" Aerolinea: "<< aerolinea.getNombre() <<  " Icao : "
+     <<  aerolinea.getIcao() << " Pais: " << aerolinea.getPais() << endl;
     cout<<"--------------------------------------"<<endl;
 #pragma endregion
 #pragma  region Muestra todas las aerolíneas activas.
@@ -157,29 +178,31 @@ int main(int argc, const char * argv[]) {
     }
 #pragma endregion
 #pragma  region Busca todos los aeropuertos (origen) en los que opera Iberia Airlines, con icao IBE
-
-    Aerolinea *iberiaAirlines = vl.buscaAerolinea("IBE");
-    ListaEnlazada<Ruta>::Iterador i;
-    VDinamico<Aeropuerto*> aeropuertosIbericos;
-    //Recorremos todas las rutas y buscamos la que tenga la Aerolinea Iberia
-    for(i = vl.rutas.iterador();!i.fin();i.siguiente()){
-        //En caso de que se encuentre
-        if(i.dato().getCompany()==iberiaAirlines)
-            aeropuertosIbericos.insertar(i.dato().getOrigin());
-    }
-    //Recorremos los aeropuertos de origen de Iberia
+Aerolinea iberiaAirlines = vl.buscaAerolinea("IBE");
+VDinamico<Aeropuerto*> aeropuertosIbericos  =  iberiaAirlines.getAeropuertosOrig();
     for (int j = 0; j < aeropuertosIbericos.tamlog(); ++j) {
         cout<<"Id: "<<aeropuertosIbericos[j]->getId()<<" Aerolinea: "<< aeropuertosIbericos[j]->getNombre() <<  " Iata : "
             <<  aeropuertosIbericos[j]->getIata() << " Iso Pais: " << aeropuertosIbericos[j]->getIsoPais() << endl;
         cout<<"--------------------------------------"<<endl;
 
     }
-
-
 #pragma  endregion
 #pragma  region   Busca todas las rutas operadas por Iberia Airlines con origen en el aeropuerto de Málaga(AGP).
+    //AeroRutasAGP
+    VDinamico<Ruta*> aerorutasAGP = iberiaAirlines.getRutasAeropuerto("AGP");
+    VDinamico<Ruta*> aerorutasMalaga;
 
+    for (int j = 0; j < aerorutasAGP.tamlog(); ++j) {
+        if(aerorutasAGP[j]->getOrigin()->getNombre() == "Málaga-Costa del Sol Airport"){
+            aerorutasMalaga.insertar(aerorutasAGP[j]);
+        }
+
+    }
+    for (int i = 0; i < aerorutasMalaga.tamlog(); ++i) {
+        cout<<"Origen: "<<aerorutasMalaga[i]->getOrigin()->getNombre()<<"---> Destino: "<< aerorutasMalaga[i]->getDestination()->getNombre()  << endl;
+        cout<<"--------------------------------------"<<endl;
+    }
 
 #pragma  endregion
-    return 0;
+return 0;
 }

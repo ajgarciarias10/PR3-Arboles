@@ -34,6 +34,7 @@ public:
     //Operador>
     bool  operator>(const Aerolinea &orig) const;
 
+    int getTamaAeroRutas();
 
     unsigned int getId() const;
 

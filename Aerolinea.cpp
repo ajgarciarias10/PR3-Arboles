@@ -4,14 +4,17 @@
 /**
  * @brief Constructor por defecto
  */
-Aerolinea::Aerolinea():id(0),icao(""),nombre(""),pais(""),activo(false) {}
+Aerolinea::Aerolinea():id(0),icao(""),nombre(""),pais(""),activo(false),aerorutas(){}
+/**
+ * @brief Constructor copia
+ * @param orig
+ */
+Aerolinea::Aerolinea(const Aerolinea &orig):id(orig.id),icao(orig.icao),nombre(orig.nombre),pais(orig.pais),activo(orig.activo),aerorutas(orig.aerorutas) {}
 /**
  * @brief Constructor parametrizado
  * @param orig
  */
-Aerolinea::Aerolinea(const Aerolinea &orig):id(orig.id),icao(orig.icao),nombre(orig.nombre),pais(orig.pais),activo(orig.activo) {}
-
-Aerolinea::Aerolinea(int id, std::string icao, std::string nombre, std::string pais, bool activo):id(id),icao(icao),nombre(nombre),pais(pais),activo(activo) {}
+Aerolinea::Aerolinea(int id, std::string icao, std::string nombre, std::string pais, bool activo):id(id),icao(icao),nombre(nombre),pais(pais),activo(activo),aerorutas() {}
 
 /**
  * @brief Metodo que obtiene los aeropuerto de origen
@@ -25,16 +28,14 @@ VDinamico<Aeropuerto*> Aerolinea::getAeropuertosOrig() {
     //Obtengo del vector dinamico de rutas  los Aeropuertos de Origen
     for (int i = 0; i < aerorutas.tamlog(); ++i) {
         Aeropuerto *pAeroOrig = aerorutas[i]->getOrigin();
-        if(pAeroOrig){
-            //Insertamos los aeropuertos de origen no nulos
-            arbolDeAeroOrig.insertar(pAeroOrig);
-        }
+        //Insertamos los aeropuertos de origen no nulos
+        arbolDeAeroOrig.insertar(pAeroOrig);
     }
     //Accedemos al aeropuerto de origen
     //Es doble puntero ya que el primero es por la direccion y el segundo donde esta el dato
-    VDinamico<Aeropuerto **> vAeroOr(arbolDeAeroOrig.recorreInorden());
+    VDinamico<Aeropuerto **> vAeroOr = arbolDeAeroOrig.recorreInorden();
     //Accedemos al doble puntero
-    for (int i = 0; i < vAeroOrig.tamlog(); ++i) {
+    for (int i = 0; i < vAeroOr.tamlog(); ++i) {
         //Accedemos al dato que es el aeropuerto y lo insertamos en el vector de aeropuertos
         vAeroOrig.insertar(*vAeroOr[i]);
     }
@@ -66,7 +67,7 @@ VDinamico<Ruta*> Aerolinea::getRutasAeropuerto(std::string iataAirport) {
  * @param r
  */
 void Aerolinea::linkAerolRuta(Ruta *r) {
-    aerorutas.insertar(r);
+    this->aerorutas.insertar(r);
 }
 /**
  * @brief Destructor de Aerolinea
@@ -138,6 +139,9 @@ const VDinamico<Ruta *> &Aerolinea::getAerorutas() const {
 
 void Aerolinea::setAerorutas(const VDinamico<Ruta *> &aerorutas) {
     Aerolinea::aerorutas = aerorutas;
+}
+int Aerolinea::getTamaAeroRutas() {
+    return aerorutas.tamlog();
 }
 
 

@@ -18,6 +18,8 @@ public:
 template<class T>
 class AVL {
 private:
+    //Tamaño del arbol
+    long tama;
     //Raiz del arbol
     Nodo<T> *raiz;
     //Recorre en Inorden
@@ -35,7 +37,6 @@ private:
     //Metodo buscarClave privadp
     Nodo<T> *buscaClave(const T &ele,Nodo<T> *p);
 public:
-    int tama;
     //Constructor por defecto
     AVL();
     //Constructor copia
@@ -45,9 +46,9 @@ public:
     //Recorre publico en Inorden
     VDinamico<T*> recorreInorden() ;
     //Metodo de inserccion de un dato
-    bool insertar (const T &ele);
+    bool insertar (T &ele);
     //Obtenemos el numero de elementos del arbol
-    unsigned int numElementos(Nodo<T> *p, int nivel);
+     long numElementos();
     //Obtengo la altura del árbol
     unsigned int altura(Nodo<T> *nodo);
     //Destructor de AVL
@@ -67,17 +68,15 @@ public:
  * @tparam T
  */
 template<class T>
-AVL<T>::AVL():raiz(nullptr){}
+AVL<T>::AVL():raiz(nullptr),tama(0){}
 /**
  * @brief Metodo publico constructor copia con acceso al privado
  * @tparam T
  * @param orig
  */
 template<class T>
-AVL<T>::AVL(const AVL<T> &orig) {
+AVL<T>::AVL(const AVL<T> &orig):tama(orig.tama) {
         raiz =  copiaAVL(orig.raiz);
-
-
 }
 /**
  * @brief Metodo Constructor Copia privado //Reccorre en preorden
@@ -86,13 +85,12 @@ AVL<T>::AVL(const AVL<T> &orig) {
  */
 template<class T>
 Nodo<T>* AVL<T> ::copiaAVL(const Nodo<T> *orig){
-    Nodo<T> *nuevaBola = nullptr;
     if (orig) {
-        nuevaBola =new Nodo<T>(*orig);
+        Nodo<T> *nuevaBola = new Nodo<T>(*orig);
             nuevaBola->izq = copiaAVL(orig->izq);
             nuevaBola->der = copiaAVL(orig->der);
     }
-    return nuevaBola;
+    return nullptr;
 }
 /**
  * @brief Operador de asignacion =
@@ -169,7 +167,7 @@ void AVL<T>::rotIzq(Nodo<T>* &p){
  * @return
  */
 template<typename T>
-bool AVL<T>::insertar(const T &ele) {
+bool AVL<T>::insertar( T &ele) {
     //Vemos si el dato esta repetido
     if(!busquedaRecursiva(ele)){
         //Inserto el dato si la busqueda recursiva es nula
@@ -215,6 +213,7 @@ int AVL<T>::insertaDato(const T &dato, Nodo<T> *&c) {
     Nodo<T> *p = c;
         int deltaH = 0;
         if (!p){
+            tama++;
             p = new Nodo<T>(dato);
             c = p; deltaH=1;
         }
@@ -247,13 +246,7 @@ int AVL<T>::insertaDato(const T &dato, Nodo<T> *&c) {
  * @return
  */
 template <class T>
-unsigned  int AVL<T>::numElementos(Nodo<T> *p, int nivel) {
-    if (p){
-        //Aumentamos el tamaño para ir recorriendo
-        tama++;
-        numElementos (p->izq, nivel+1);
-        numElementos (p->der, nivel+1);
-    }
+long   AVL<T>::numElementos() {
     //Devuelvo el tamaño del arbol
     return  tama;
 

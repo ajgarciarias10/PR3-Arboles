@@ -31,13 +31,15 @@ public:
     //AñadirNuevoAeropuerto
     void añadeAeropuerto(const Aeropuerto *aeropuerto);
     //AñadirNuevaRuta
-    void addNuevaRuta(string idAerOrig, string idAerDest, string  icaoRuta);
+    void addNuevaRuta(Aeropuerto* AerOrig, Aeropuerto* AerDest, Aerolinea* aerolineaEncontrada);
     //Añade Aerolinea
     void addAerolinea(Aerolinea &aerolinea);
     //Buscar Aerolinea por icao
-    Aerolinea *buscaAerolinea(string icaoAerolinea);
+    Aerolinea &buscaAerolinea(string icaoAerolinea);
     //Buscar Aerolinea activa
     VDinamico<Aerolinea*> buscaAerolineasActiva();
+    //Metodo que obtiene la aerolineas por el Pais
+    VDinamico<Aerolinea*> getAerolineasPais(string idPais);
 };
 
 

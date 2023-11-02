@@ -82,37 +82,13 @@ VDinamico<Aeropuerto * > VuelaFlight::buscarAeropuertoPais(string pais) {
  * @param idAerDest
  * @param aerolinea
  */
-void VuelaFlight::addNuevaRuta(string idAerOrig, string idAerDest, string  icaoRuta) {
-    #pragma  region   Buscar en tiempo logarítmico la aerolínea que hace la ruta en VuelaFlight::work
-        Aerolinea aero2;
-        aero2.setIcao(icaoRuta);
-        Aerolinea *aerolineaEncontrada;
-        aerolineaEncontrada = work.busquedaRecursiva(aero2);
-    #pragma  endregion
-    #pragma region Buscar en tiempo logarítmico en  PR2 + añadir nueva ruta
-        //Declaro un aeropuerto
-        Aeropuerto aero;
-        //Seteo su iata de origen
-        aero.setIata(idAerOrig);
-        //Compruebo la posicion dentro del vector dinamico en el que esta Tanto la ruta de origen con la de destino
-        //Y así descubro el aeropuerto ORIGEN
-        int posOrigen = aeropuertos.busquedaBinaria(aero);
-        //Seteo su iata de destino
-        aero.setIata(idAerDest);
-        //Y así descubro el aeropuerto destino
-        int posDest = aeropuertos.busquedaBinaria(aero);
-        if(posOrigen !=-1 && posDest !=-1 && !aerolineaEncontrada){
+void VuelaFlight::addNuevaRuta(Aeropuerto* AerOrig, Aeropuerto* AerDest, Aerolinea* aerolineaEncontrada) {
             //Añadimos las rutas ya con la aerolinea  y los aeropertos
-            Ruta ruta(aerolineaEncontrada,&aeropuertos[posDest],&aeropuertos[posOrigen]);
-            rutas.insertaFin(ruta);
+            rutas.insertaFin(*new Ruta(aerolineaEncontrada,AerDest,AerOrig));
             //d. Obtener la dirección del objeto ruta recién insertado en la lista (en la última posición).
             //e. Enlazar la aerolínea encontrada antes con la ruta anterior mediante
             //Aerolinea::linkAerolRuta.
             aerolineaEncontrada->linkAerolRuta(&rutas.fin());
-        }
-
-#pragma  endregion
-
 
 }
 
@@ -144,14 +120,14 @@ void VuelaFlight::addAerolinea(Aerolinea &aerolinea) {
  * @param icaoAerolinea
  * @return
  */
-Aerolinea *VuelaFlight::buscaAerolinea(std::string icaoAerolinea) {
+Aerolinea &VuelaFlight::buscaAerolinea(std::string icaoAerolinea) {
     Aerolinea aerol;
     aerol.setIcao(icaoAerolinea);
     Aerolinea *t = work.busquedaRecursiva(aerol);
     if(!t){
         throw std::invalid_argument("No se ha encontrado la aerolinea");
     }
-    return  t;
+    return  *t;
 
 }
 /**
@@ -170,3 +146,4 @@ VDinamico<Aerolinea*> VuelaFlight::buscaAerolineasActiva() {
     return  devuelveAerolinea;
 
 }
+
