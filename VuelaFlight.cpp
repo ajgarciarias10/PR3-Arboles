@@ -146,4 +146,38 @@ VDinamico<Aerolinea*> VuelaFlight::buscaAerolineasActiva() {
     return  devuelveAerolinea;
 
 }
+/**
+ * @brief Metodo que busca la Aerolinea por el pais
+ * @param idPais
+ * @return
+ */
+VDinamico<Aerolinea*> VuelaFlight::getAerolineasPais(std::string idPais) {
+    VDinamico<Aerolinea*> buscaAerolinea = work.recorreInorden();
+    VDinamico<Aerolinea*> devuelveAerolinea;
+    for (int i = 0; i < buscaAerolinea.tamlog(); ++i) {
+        if(buscaAerolinea[i]->getPais() == idPais){
+            devuelveAerolinea.insertar(buscaAerolinea[i]);
+        }
+    }
+
+    return  devuelveAerolinea;
+}
+
+ VDinamico<Aeropuerto> &VuelaFlight::getAeropuertos()  {
+    return aeropuertos;
+}
+
+
+
+ ListaEnlazada<Ruta> &VuelaFlight::getRutas()  {
+    return rutas;
+}
+
+
+
+ AVL<Aerolinea> &VuelaFlight::getWork()  {
+    return work;
+}
+
+
 

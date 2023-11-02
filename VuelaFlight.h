@@ -8,11 +8,12 @@
 
 
 class VuelaFlight {
+private:
     //Declaramos los metodo publicos y constructores
-public:
     VDinamico<Aeropuerto> aeropuertos;
     ListaEnlazada<Ruta> rutas;
     AVL<Aerolinea> work;
+public:
     //Constructor por defecto
     VuelaFlight();
     //Constructor copia
@@ -40,6 +41,11 @@ public:
     VDinamico<Aerolinea*> buscaAerolineasActiva();
     //Metodo que obtiene la aerolineas por el Pais
     VDinamico<Aerolinea*> getAerolineasPais(string idPais);
+
+     VDinamico<Aeropuerto> &getAeropuertos() ;
+     ListaEnlazada<Ruta> &getRutas() ;
+     AVL<Aerolinea> &getWork() ;
+
 };
 
 

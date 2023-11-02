@@ -67,7 +67,7 @@ int main(int argc, const char * argv[]) {
             }
         }
         //Tras leer ordenamos el vector por Codigo Iata
-        vl.aeropuertos.ordenar();
+        vl.getAeropuertos().ordenar();
         is.close();
     }else{
         std::cout << "Error de apertura en archivo" << std::endl;
@@ -131,7 +131,7 @@ int main(int argc, const char * argv[]) {
                 Aerolinea aero2;
                 aero2.setIcao(icaoRuta);
                 Aerolinea *aerolineaEncontrada;
-                aerolineaEncontrada = vl.work.busquedaRecursiva(aero2);
+                aerolineaEncontrada = vl.getWork().busquedaRecursiva(aero2);
 #pragma  endregion
 #pragma region Buscar en tiempo logarítmico en  PR2 + añadir nueva ruta
                 //Declaro un aeropuerto
@@ -140,14 +140,14 @@ int main(int argc, const char * argv[]) {
                 aero.setIata(origen2);
                 //Compruebo la posicion dentro del vector dinamico en el que esta Tanto la ruta de origen con la de destino
                 //Y así descubro el aeropuerto ORIGEN
-                int posOrigen = vl.aeropuertos.busquedaBinaria(aero);
+                int posOrigen = vl.getAeropuertos().busquedaBinaria(aero);
                 //Seteo su iata de destino
                 aero.setIata(destino2);
                 //Y así descubro el aeropuerto destino
-                int posDest = vl.aeropuertos.busquedaBinaria(aero);
+                int posDest = vl.getAeropuertos().busquedaBinaria(aero);
                 if(posOrigen !=-1 && posDest !=-1 && aerolineaEncontrada){
                     //Añadimos nueva ruta a partir del origen el destino y el icao
-                    vl.addNuevaRuta(&vl.aeropuertos[posOrigen],&vl.aeropuertos[posDest],aerolineaEncontrada);
+                    vl.addNuevaRuta(&vl.getAeropuertos()[posOrigen],&vl.getAeropuertos()[posDest],aerolineaEncontrada);
                 }
 
             }
@@ -161,33 +161,39 @@ int main(int argc, const char * argv[]) {
 
     std::cout << "Tiempo lectura de las rutas: " << ((clock() - lecturaRutas) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
 #pragma endregion
+    try {
 #pragma region Visualiza toda la información de la aerolínea Ryanair, RYR
-    cout<<"--------------------------------------"<<endl;
+
+    cout<<"------------------------------Información de la aerolínea Ryanair------------------------------"<<endl;
     Aerolinea aerolinea =  vl.buscaAerolinea("RYR");
      cout<<"Id: "<<aerolinea.getId() <<" Aerolinea: "<< aerolinea.getNombre() <<  " Icao : "
      <<  aerolinea.getIcao() << " Pais: " << aerolinea.getPais() << endl;
-    cout<<"--------------------------------------"<<endl;
 #pragma endregion
 #pragma  region Muestra todas las aerolíneas activas.
-    VDinamico<Aerolinea*> vectorsito(vl.buscaAerolineasActiva());
-    for (int i = 0; i < vectorsito.tamlog(); ++i) {
-        string activo = " ";
-        vectorsito[i]->isActivo() ? activo = "Si" : activo ="No";
-        cout<< "Id: "<< vectorsito[i]->getId() << " Nombre: "<< vectorsito[i]->getNombre()<< " Pais: " << vectorsito[i]->getPais() <<" Activo: "<< activo <<"\n"<<endl;
-        cout<<"--------------------------------------"<<endl;
-    }
+
+        cout<<"--------------------------------------------------------Aerolíneas activas.--------------------------------------------------------------"<<endl;
+        VDinamico<Aerolinea*> vectorsito(vl.buscaAerolineasActiva());
+        for (int i = 0; i < vectorsito.tamlog(); ++i) {
+            string activo = " ";
+            vectorsito[i]->isActivo() ? activo = "Si" : activo ="No";
+            cout<< "Id: "<< vectorsito[i]->getId() << " Nombre: "<< vectorsito[i]->getNombre()<< " Pais: " << vectorsito[i]->getPais() <<" Activo: "<< activo <<"\n"<<endl;
+
+        }
+
 #pragma endregion
 #pragma  region Busca todos los aeropuertos (origen) en los que opera Iberia Airlines, con icao IBE
-Aerolinea iberiaAirlines = vl.buscaAerolinea("IBE");
-VDinamico<Aeropuerto*> aeropuertosIbericos  =  iberiaAirlines.getAeropuertosOrig();
+    cout<<"------------------------------Aeropuertos (origen) en los que opera Iberia Airlines-------------------------------"<<endl;
+    Aerolinea iberiaAirlines = vl.buscaAerolinea("IBE");
+    VDinamico<Aeropuerto*> aeropuertosIbericos  =  iberiaAirlines.getAeropuertosOrig();
     for (int j = 0; j < aeropuertosIbericos.tamlog(); ++j) {
         cout<<"Id: "<<aeropuertosIbericos[j]->getId()<<" Aerolinea: "<< aeropuertosIbericos[j]->getNombre() <<  " Iata : "
             <<  aeropuertosIbericos[j]->getIata() << " Iso Pais: " << aeropuertosIbericos[j]->getIsoPais() << endl;
-        cout<<"--------------------------------------"<<endl;
 
     }
+
 #pragma  endregion
 #pragma  region   Busca todas las rutas operadas por Iberia Airlines con origen en el aeropuerto de Málaga(AGP).
+    cout<<"------------------------------ Rutas operadas por Iberia Airlines con origen en el aeropuerto de Málaga(AGP)------------------------------"<<endl;
     //AeroRutasAGP
     VDinamico<Ruta*> aerorutasAGP = iberiaAirlines.getRutasAeropuerto("AGP");
     VDinamico<Ruta*> aerorutasMalaga;
@@ -200,9 +206,27 @@ VDinamico<Aeropuerto*> aeropuertosIbericos  =  iberiaAirlines.getAeropuertosOrig
     }
     for (int i = 0; i < aerorutasMalaga.tamlog(); ++i) {
         cout<<"Origen: "<<aerorutasMalaga[i]->getOrigin()->getNombre()<<"---> Destino: "<< aerorutasMalaga[i]->getDestination()->getNombre()  << endl;
-        cout<<"--------------------------------------"<<endl;
+
     }
 
 #pragma  endregion
-return 0;
+#pragma region Aerolíneas que operan en España.
+        cout<<"------------------------------Aerolíneas que operan en España------------------------------"<<endl;
+            VDinamico<Aerolinea*> resAerolinea =  vl.getAerolineasPais("Spain");
+            for (int i = 0; i < resAerolinea.tamlog(); ++i) {
+                cout<< "Aerolinea: "<< resAerolinea[i]->getId() << " Nombre: "<< resAerolinea[i]->getNombre()<< " Pais: " << resAerolinea[i]->getPais() <<"\n"<<endl;
+            }
+
+
+#pragma endregion
+    }catch (invalid_argument &e){
+        cout<<e.what()<<endl;
+    }
+    catch(out_of_range &o){
+        cout<<o.what()<<endl;
+    }
+    catch(bad_alloc &b){
+        cout<<b.what()<<endl;
+    }
+    return 0;
 }

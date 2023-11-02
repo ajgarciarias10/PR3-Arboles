@@ -150,25 +150,20 @@ ListaEnlazada<T> ListaEnlazada<T>::operator+(const ListaEnlazada<T> &lista){
  */
 template<class T>
 ListaEnlazada<T> &ListaEnlazada<T>::concatena(const ListaEnlazada<T> &lista) {
-    //Si ambas estan vacias
-    if(tam==0 && lista.tam==0){
-        return *this;
+    Nodo<T>* puntCab= lista.cabecera;
+    while(puntCab){
+        Nodo<T> *pnew  =new Nodo<T>(puntCab->dato,0);
+        tam++;
+        if(cabecera == 0){
+            cabecera = pnew;
+        }
+        if(cola !=0){
+            cola->sig = pnew;
+        }
+        cola = pnew;
+        puntCab = puntCab->sig;
     }
-    //Si la que vamos a concatenar esta vacia
-    if (tam!=0 && lista.tam==0)
-        return *this;
-    //Si la que tenemos esta vacia y la que vamos a concatenar no
-    if (lista.tam!=0 && tam==0){
-        cabecera=lista.cabecera;
-        cola=lista.cola;
-        tam=lista.tam;
-        return *this;
-    }else{
-        cola->sig=lista.cabecera;
-        cola=lista.cola;
-        tam=tam+lista.tam;
-        return *this;
-    }
+    return *this;
 }
 
 /**
