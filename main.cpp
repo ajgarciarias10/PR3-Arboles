@@ -7,7 +7,6 @@
 #include "Aeropuerto.h"
 #include "VDinamico.h"
 #include "VuelaFlight.h"
-
 using  namespace std;
 /**
  * @brief Practica 3 EEDD
@@ -136,7 +135,7 @@ int main(int argc, const char * argv[]) {
     std::cout << "Tiempo lectura de las rutas: " << ((clock() - lecturaRutas) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
 #pragma endregion
 
-    cout<< "Tamaño Arbol: " << vl.tamaWork() << "\n"
+    cout<< "Tamaño Aerolineas: " << vl.tamaWork() << "\n"
          << "Tamaño aeropuertos: " << vl.tamaAeropuertos() << "\n"
          << "Tamaño rutas: " << vl.tamaRutas() << "\n" <<endl;
 
