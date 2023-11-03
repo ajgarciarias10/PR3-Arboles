@@ -40,7 +40,7 @@ public:
     //AñadirNuevaRuta
     void addNuevaRuta(Aeropuerto* AerOrig, Aeropuerto* AerDest, Aerolinea* aerolineaEncontrada);
     //Añade Aerolinea
-    void addAerolinea(Aerolinea &aerolinea);
+    void addAerolinea(Aerolinea aerolinea);
     //Buscar Aerolinea por icao
     Aerolinea &buscaAerolinea(string icaoAerolinea);
     //Buscar Aerolinea activa

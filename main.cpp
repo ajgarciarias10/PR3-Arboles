@@ -94,7 +94,7 @@ int main(int argc, const char * argv[]) {
                 //condición ? valor_si_verdadero : valor_si_falso;
                 activo=="Y" ? activoBool = true : activoBool = false;
                 int id = stoi(idAerolineaStr);
-                vl.addAerolinea(*new Aerolinea(id,icao,nombreAero,pais,activoBool));
+                vl.addAerolinea(Aerolinea(id,icao,nombreAero,pais,activoBool));
                 fila = "";
                 columnas.clear();
             }
@@ -186,6 +186,8 @@ int main(int argc, const char * argv[]) {
             aerorutasMalaga.insertar(aerorutasAGP[j]);
         }
     }
+
+    cout<<"Numero de rutas: "<< aerorutasMalaga.tamlog()<<endl<<endl;
     for (int i = 0; i < aerorutasMalaga.tamlog(); ++i) {
         cout<<"Origen: "<<aerorutasMalaga[i]->getOrigin()->getNombre()<<"---> Destino: "<< aerorutasMalaga[i]->getDestination()->getNombre() <<endl;
 

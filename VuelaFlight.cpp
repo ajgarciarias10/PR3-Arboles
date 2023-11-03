@@ -111,7 +111,7 @@ void VuelaFlight::añadeAeropuerto(const Aeropuerto aeropuerto) {
  * @brief Metodo AddAerolinea
  * @param aerolinea
  */
-void VuelaFlight::addAerolinea(Aerolinea &aerolinea) {
+void VuelaFlight::addAerolinea(Aerolinea aerolinea) {
     work.insertar(aerolinea);
 
 }
