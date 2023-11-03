@@ -10,8 +10,8 @@
 
 using  namespace std;
 /**
- * @brief Practica 2 EEDD
- * @date 19/10/2023
+ * @brief Practica 3 EEDD
+ * @date 02/11/2023
  * @author Antonio José Garcia Arias, ajga001@red.ujaen.es
  * @author Abraham Garcia Hurtado, agh00040@red.ujaen.es
  * @param argc
@@ -186,7 +186,7 @@ int main(int argc, const char * argv[]) {
     Aerolinea iberiaAirlines = vl.buscaAerolinea("IBE");
     VDinamico<Aeropuerto*> aeropuertosIbericos  =  iberiaAirlines.getAeropuertosOrig();
     for (int j = 0; j < aeropuertosIbericos.tamlog(); ++j) {
-        cout<<"Id: "<<aeropuertosIbericos[j]->getId()<<" Aerolinea: "<< aeropuertosIbericos[j]->getNombre() <<  " Iata : "
+        cout<<"Id: "<<aeropuertosIbericos[j]->getId()<<" Aeropuerto: "<< aeropuertosIbericos[j]->getNombre() <<  " Iata : "
             <<  aeropuertosIbericos[j]->getIata() << " Iso Pais: " << aeropuertosIbericos[j]->getIsoPais() << endl;
 
     }
@@ -214,7 +214,7 @@ int main(int argc, const char * argv[]) {
         cout<<"------------------------------Aerolíneas que operan en España------------------------------"<<endl;
             VDinamico<Aerolinea*> resAerolinea =  vl.getAerolineasPais("Spain");
             for (int i = 0; i < resAerolinea.tamlog(); ++i) {
-                cout<< "Aerolinea: "<< resAerolinea[i]->getId() << " Nombre: "<< resAerolinea[i]->getNombre()<< " Pais: " << resAerolinea[i]->getPais() <<"\n"<<endl;
+                cout<< "Id: "<< resAerolinea[i]->getId() << " Nombre: "<< resAerolinea[i]->getNombre()<< " Pais: " << resAerolinea[i]->getPais() <<"\n"<<endl;
             }
 
 

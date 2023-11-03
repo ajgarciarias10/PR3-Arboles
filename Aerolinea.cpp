@@ -25,22 +25,20 @@ VDinamico<Aeropuerto*> Aerolinea::getAeropuertosOrig() {
     VDinamico<Aeropuerto *> vAeroOrig;
     //Creo un arbol para almacenar los aeropuertos de origen
     AVL<Aeropuerto *> arbolDeAeroOrig;
-    //Obtengo del vector dinamico de rutas  los Aeropuertos de Origen
-    for (int i = 0; i < aerorutas.tamlog(); ++i) {
-        Aeropuerto *pAeroOrig = aerorutas[i]->getOrigin();
-        //Insertamos los aeropuertos de origen no nulos
-        arbolDeAeroOrig.insertar(pAeroOrig);
+    //Obtengo   aerorutas
+    VDinamico<Ruta*> aerorutasMetodo = getAerorutas();
+    for (int i = 0; i < aerorutasMetodo.tamlog(); ++i) {
+        Aeropuerto *aeropuerto = aerorutasMetodo[i]->getOrigin();
+        //Si en el árbol el dato no esta repetido
+            if(!arbolDeAeroOrig.busquedaRecursiva(aeropuerto)){
+                //Insertamos en el arbol
+                arbolDeAeroOrig.insertar(aeropuerto);
+                vAeroOrig.insertar(aeropuerto);
+            }
     }
-    //Accedemos al aeropuerto de origen
-    //Es doble puntero ya que el primero es por la direccion y el segundo donde esta el dato
-    VDinamico<Aeropuerto **> vAeroOr = arbolDeAeroOrig.recorreInorden();
-    //Accedemos al doble puntero
-    for (int i = 0; i < vAeroOr.tamlog(); ++i) {
-        //Accedemos al dato que es el aeropuerto y lo insertamos en el vector de aeropuertos
-        vAeroOrig.insertar(*vAeroOr[i]);
-    }
-    //Devolvemos el vector con los aeropuertos de origen
+
     return  vAeroOrig;
+
 }
 /***
  * @brief Devuelve todas las rutas cuyo AeroPuerto de origen o destino tenga ese iata
