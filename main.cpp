@@ -139,9 +139,9 @@ int main(int argc, const char * argv[]) {
 
 #pragma endregion
 
-    cout<< "Tamaño Aerolineas: " << vl.tamaWork() << "\n"
-         << "Tamaño aeropuertos: " << vl.tamaAeropuertos() << "\n"
-         << "Tamaño rutas: " << vl.tamaRutas() << "\n" <<endl;
+    cout<< "Tamaño Aerolineas: " << vl.tamaWork() <<endl
+         << "Tamaño aeropuertos: " << vl.tamaAeropuertos() << endl
+         << "Tamaño rutas: " << vl.tamaRutas() << endl <<endl;
 
     try {
 #pragma region Visualiza toda la información de la aerolínea Ryanair, RYR
@@ -154,11 +154,12 @@ int main(int argc, const char * argv[]) {
 #pragma  region Muestra todas las aerolíneas activas.
 
         cout<<endl<<"--------------------------Aerolíneas activas--------------------------"<<endl<<endl;
-        VDinamico<Aerolinea*> vectorsito(vl.buscaAerolineasActiva());
-        for (int i = 0; i < vectorsito.tamlog(); ++i) {
+        VDinamico<Aerolinea*> vectorActivas(vl.buscaAerolineasActiva());
+        cout<<"Numero de aerolineas activas: "<< vectorActivas.tamlog()<<endl<<endl;
+        for (int i = 0; i < vectorActivas.tamlog(); ++i) {
             string activo = " ";
-            vectorsito[i]->isActivo() ? activo = "Si" : activo ="No";
-            cout<< "Id: "<< vectorsito[i]->getId() << " Nombre: "<< vectorsito[i]->getNombre()<< " Pais: " << vectorsito[i]->getPais() <<" Activo: "<< activo <<endl;
+            vectorActivas[i]->isActivo() ? activo = "Si" : activo ="No";
+            cout<< "Id: "<< vectorActivas[i]->getId() << " Nombre: "<< vectorActivas[i]->getNombre()<< " Pais: " << vectorActivas[i]->getPais() <<" Activo: "<< activo <<endl;
 
         }
 
@@ -166,10 +167,11 @@ int main(int argc, const char * argv[]) {
 #pragma  region Busca todos los aeropuertos (origen) en los que opera Iberia Airlines, con icao IBE
     cout<<endl<<"------------------------------Aeropuertos (origen) en los que opera Iberia Airlines-------------------------------"<<endl<<endl;
     Aerolinea iberiaAirlines = vl.buscaAerolinea("IBE");
-    VDinamico<Aeropuerto*> aeropuertosIbericos  =  iberiaAirlines.getAeropuertosOrig();
-    for (int j = 0; j < aeropuertosIbericos.tamlog(); ++j) {
-        cout<<"Id: "<<aeropuertosIbericos[j]->getId()<<" Aeropuerto: "<< aeropuertosIbericos[j]->getNombre() <<  " Iata : "
-            <<  aeropuertosIbericos[j]->getIata() << " Iso Pais: " << aeropuertosIbericos[j]->getIsoPais() <<endl;
+    VDinamico<Aeropuerto*> aeropuertosIberia  =  iberiaAirlines.getAeropuertosOrig();
+    cout<<"Numero de aeropuertos que operan con iberia: "<< aeropuertosIberia.tamlog()<<endl<<endl;
+    for (int j = 0; j < aeropuertosIberia.tamlog(); ++j) {
+        cout<<"Id: "<<aeropuertosIberia[j]->getId()<<" Aeropuerto: "<< aeropuertosIberia[j]->getNombre() <<  " Iata : "
+            <<  aeropuertosIberia[j]->getIata() << " Iso Pais: " << aeropuertosIberia[j]->getIsoPais() <<endl;
 
     }
 
@@ -179,12 +181,10 @@ int main(int argc, const char * argv[]) {
     //AeroRutasAGP
     VDinamico<Ruta*> aerorutasAGP = iberiaAirlines.getRutasAeropuerto("AGP");
     VDinamico<Ruta*> aerorutasMalaga;
-
     for (int j = 0; j < aerorutasAGP.tamlog(); ++j) {
         if(aerorutasAGP[j]->getOrigin()->getNombre() == "Málaga-Costa del Sol Airport"){
             aerorutasMalaga.insertar(aerorutasAGP[j]);
         }
-
     }
     for (int i = 0; i < aerorutasMalaga.tamlog(); ++i) {
         cout<<"Origen: "<<aerorutasMalaga[i]->getOrigin()->getNombre()<<"---> Destino: "<< aerorutasMalaga[i]->getDestination()->getNombre() <<endl;
@@ -194,10 +194,11 @@ int main(int argc, const char * argv[]) {
 #pragma  endregion
 #pragma region Aerolíneas que operan en España.
         cout<<endl<<"------------------------------Aerolíneas que operan en España------------------------------"<<endl<<endl;
-            VDinamico<Aerolinea*> resAerolinea =  vl.getAerolineasPais("Spain");
-            for (int i = 0; i < resAerolinea.tamlog(); ++i) {
-                cout<< "Id: "<< resAerolinea[i]->getId() << " Nombre: "<< resAerolinea[i]->getNombre()<< " Pais: " << resAerolinea[i]->getPais() <<endl;
-            }
+        VDinamico<Aerolinea*> aerolineaEsp =  vl.getAerolineasPais("Spain");
+        cout<<"Numero de aerolineas que operan en España: "<<aerolineaEsp.tamlog()<<endl<<endl;
+        for (int i = 0; i < aerolineaEsp.tamlog(); ++i) {
+            cout<< "Id: "<< aerolineaEsp[i]->getId() << " Nombre: "<< aerolineaEsp[i]->getNombre()<< " Pais: " << aerolineaEsp[i]->getPais() <<endl;
+        }
 
 
 #pragma endregion
