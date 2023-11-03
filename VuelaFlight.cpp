@@ -84,7 +84,7 @@ VDinamico<Aeropuerto * > VuelaFlight::buscarAeropuertoPais(string pais) {
  */
 void VuelaFlight::addNuevaRuta(Aeropuerto* AerOrig, Aeropuerto* AerDest, Aerolinea* aerolineaEncontrada) {
             //Añadimos las rutas ya con la aerolinea  y los aeropertos
-            rutas.insertaFin(*new Ruta(aerolineaEncontrada,AerDest,AerOrig));
+            rutas.insertaFin(Ruta(aerolineaEncontrada,AerDest,AerOrig));
             //d. Obtener la dirección del objeto ruta recién insertado en la lista (en la última posición).
             //e. Enlazar la aerolínea encontrada antes con la ruta anterior mediante
             //Aerolinea::linkAerolRuta.
@@ -103,8 +103,8 @@ VuelaFlight::VuelaFlight(const VuelaFlight &vl) : aeropuertos(vl.aeropuertos), r
  * @param aeropuerto
  */
 
-void VuelaFlight::añadeAeropuerto(const Aeropuerto *aeropuerto) {
-    aeropuertos.insertar(*aeropuerto);
+void VuelaFlight::añadeAeropuerto(const Aeropuerto aeropuerto) {
+    aeropuertos.insertar(aeropuerto);
 
 }
 /**
@@ -162,22 +162,59 @@ VDinamico<Aerolinea*> VuelaFlight::getAerolineasPais(std::string idPais) {
 
     return  devuelveAerolinea;
 }
-
- VDinamico<Aeropuerto> &VuelaFlight::getAeropuertos()  {
-    return aeropuertos;
+/**
+ * @brief Metodo que carga las rutas que leemos
+ * @param icaoRuta
+ * @param origen2
+ * @param destino2
+ */
+void VuelaFlight::cargarRutas(string icaoRuta,string origen2, string destino2){
+#pragma  region   Buscar en tiempo logarítmico la aerolínea que hace la ruta en VuelaFlight::work
+    Aerolinea aero2;
+    aero2.setIcao(icaoRuta);
+    Aerolinea *aerolineaEncontrada;
+    aerolineaEncontrada = work.busquedaRecursiva(aero2);
+#pragma  endregion
+#pragma region Buscar en tiempo logarítmico en  PR2 + añadir nueva ruta
+    //Declaro un aeropuerto
+    Aeropuerto aero;
+    //Seteo su iata de origen
+    aero.setIata(origen2);
+    //Compruebo la posicion dentro del vector dinamico en el que esta Tanto la ruta de origen con la de destino
+    //Y así descubro el aeropuerto ORIGEN
+    int posOrigen = aeropuertos.busquedaBinaria(aero);
+    //Seteo su iata de destino
+    aero.setIata(destino2);
+    //Y así descubro el aeropuerto destino
+    int posDest = aeropuertos.busquedaBinaria(aero);
+    if(posOrigen !=-1 && posDest !=-1 && aerolineaEncontrada){
+        //Añadimos nueva ruta a partir del origen el destino y el icao
+        addNuevaRuta(&aeropuertos[posOrigen],&aeropuertos[posDest],aerolineaEncontrada);
+    }
 }
+/**
+ * @brief Metodo que ordena los aeropuertos
+ */
 
-
-
- ListaEnlazada<Ruta> &VuelaFlight::getRutas()  {
-    return rutas;
+void VuelaFlight::ordenarAeropuertos(){
+    aeropuertos.ordenar();
 }
-
-
-
- AVL<Aerolinea> &VuelaFlight::getWork()  {
-    return work;
+/**
+ * @brief Metodo que devuelve el tamaño del vector
+ */
+long VuelaFlight::tamaAeropuertos() {
+    return aeropuertos.tamlog();
 }
-
-
+/**
+ * @brief Metodo que devuelve el tamaño de la lista de rutas
+ */
+long VuelaFlight::tamaRutas() {
+    return rutas.Tam();
+}
+/**
+ * @brief Metodo que devuelve el tamaño del arbol
+ */
+long VuelaFlight::tamaWork() {
+    return work.getTama();
+}
 

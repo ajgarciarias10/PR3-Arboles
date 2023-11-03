@@ -25,8 +25,6 @@ int main(int argc, const char * argv[]) {
 //Declaro clase VuelaFlight
     VuelaFlight vl;
 #pragma region Aeropuerto valores
-
-    float latitud, longitud;
     string id = "";
     string iata = "";
     string ident="";
@@ -55,19 +53,16 @@ int main(int argc, const char * argv[]) {
                 getline(columnas, continente, ';');
                 getline(columnas, iso_pais, ';');
                 //  Transformamos la latitud y longitud a float
-                stof(latitud_str);
-                stof(longitud_str);
-
                 fila = "";
                 columnas.clear();
                 //Insertamos en el Vector Dinamico el Aeropuerto
-                vl.añadeAeropuerto(new Aeropuerto(id,iata,tipo,nombre,continente,iso_pais,* new UTM(latitud,longitud)));
+                vl.añadeAeropuerto(Aeropuerto(id,iata,tipo,nombre,continente,iso_pais, UTM(stof(latitud_str),stof(longitud_str))));
 
 
             }
         }
         //Tras leer ordenamos el vector por Codigo Iata
-        vl.getAeropuertos().ordenar();
+        vl.ordenarAeropuertos();
         is.close();
     }else{
         std::cout << "Error de apertura en archivo" << std::endl;
@@ -127,28 +122,7 @@ int main(int argc, const char * argv[]) {
                 getline(columnas, destino2, ';'); //leemos caracteres hasta encontrar y omitir ';'
                 fila = "";
                 columnas.clear();
-#pragma  region   Buscar en tiempo logarítmico la aerolínea que hace la ruta en VuelaFlight::work
-                Aerolinea aero2;
-                aero2.setIcao(icaoRuta);
-                Aerolinea *aerolineaEncontrada;
-                aerolineaEncontrada = vl.getWork().busquedaRecursiva(aero2);
-#pragma  endregion
-#pragma region Buscar en tiempo logarítmico en  PR2 + añadir nueva ruta
-                //Declaro un aeropuerto
-                Aeropuerto aero;
-                //Seteo su iata de origen
-                aero.setIata(origen2);
-                //Compruebo la posicion dentro del vector dinamico en el que esta Tanto la ruta de origen con la de destino
-                //Y así descubro el aeropuerto ORIGEN
-                int posOrigen = vl.getAeropuertos().busquedaBinaria(aero);
-                //Seteo su iata de destino
-                aero.setIata(destino2);
-                //Y así descubro el aeropuerto destino
-                int posDest = vl.getAeropuertos().busquedaBinaria(aero);
-                if(posOrigen !=-1 && posDest !=-1 && aerolineaEncontrada){
-                    //Añadimos nueva ruta a partir del origen el destino y el icao
-                    vl.addNuevaRuta(&vl.getAeropuertos()[posOrigen],&vl.getAeropuertos()[posDest],aerolineaEncontrada);
-                }
+                vl.cargarRutas(icaoRuta,origen2,destino2);
 
             }
         }
@@ -161,6 +135,11 @@ int main(int argc, const char * argv[]) {
 
     std::cout << "Tiempo lectura de las rutas: " << ((clock() - lecturaRutas) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
 #pragma endregion
+
+    cout<< "Tamaño Arbol: " << vl.tamaWork() << "\n"
+         << "Tamaño aeropuertos: " << vl.tamaAeropuertos() << "\n"
+         << "Tamaño rutas: " << vl.tamaRutas() << "\n" <<endl;
+
     try {
 #pragma region Visualiza toda la información de la aerolínea Ryanair, RYR
 

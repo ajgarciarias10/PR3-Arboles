@@ -36,7 +36,7 @@ public:
     //Buscar AeropuertoPais
     VDinamico<Aeropuerto*> buscarAeropuertoPais(string pais);
     //AñadirNuevoAeropuerto
-    void añadeAeropuerto(const Aeropuerto *aeropuerto);
+    void añadeAeropuerto(const Aeropuerto aeropuerto);
     //AñadirNuevaRuta
     void addNuevaRuta(Aeropuerto* AerOrig, Aeropuerto* AerDest, Aerolinea* aerolineaEncontrada);
     //Añade Aerolinea
@@ -47,10 +47,16 @@ public:
     VDinamico<Aerolinea*> buscaAerolineasActiva();
     //Metodo que obtiene la aerolineas por el Pais
     VDinamico<Aerolinea*> getAerolineasPais(string idPais);
-
-     VDinamico<Aeropuerto> &getAeropuertos() ;
-     ListaEnlazada<Ruta> &getRutas() ;
-     AVL<Aerolinea> &getWork() ;
+    //Metodo que Carga las Rutas
+    void cargarRutas(string icaoRuta,string origen2, string destino2);
+    //Metodo que ordenar Aeropuertos
+    void ordenarAeropuertos();
+    //Devuelve el tamaño de aeropuertos
+    long tamaAeropuertos ();
+    //Devuelve el tamaño de rutas
+    long tamaRutas();
+    //Devuelve el tamaño del Arbol
+    long tamaWork();
 
 };
 
