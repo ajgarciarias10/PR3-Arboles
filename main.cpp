@@ -77,6 +77,8 @@ int main(int argc, const char * argv[]) {
     string activo="";
 #pragma endregion
 #pragma region  Carga Aerolineas
+
+    clock_t lecturaAerolineas = clock();
     is.open("../aerolineas_v1.csv"); //carpeta de proyecto
     if(is.good()){
         while (getline(is, fila)){
@@ -102,6 +104,8 @@ int main(int argc, const char * argv[]) {
         std::cout << "Error de apertura en archivo" << std::endl;
     }
     is.close();
+    std::cout << "Tiempo lectura de las aerolineas: " << ((clock() - lecturaAerolineas) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+
 #pragma  endregion
 #pragma region Valores Rutas
     string icaoRuta = "";
@@ -131,8 +135,8 @@ int main(int argc, const char * argv[]) {
     }
 
     is.close();
-
     std::cout << "Tiempo lectura de las rutas: " << ((clock() - lecturaRutas) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+
 #pragma endregion
 
     cout<< "Tamaño Aerolineas: " << vl.tamaWork() << "\n"
@@ -142,36 +146,36 @@ int main(int argc, const char * argv[]) {
     try {
 #pragma region Visualiza toda la información de la aerolínea Ryanair, RYR
 
-    cout<<"------------------------------Información de la aerolínea Ryanair------------------------------"<<endl;
+    cout<<endl<<"------------------------------Información de la aerolínea Ryanair------------------------------"<<endl<<endl;
     Aerolinea aerolinea =  vl.buscaAerolinea("RYR");
      cout<<"Id: "<<aerolinea.getId() <<" Aerolinea: "<< aerolinea.getNombre() <<  " Icao : "
      <<  aerolinea.getIcao() << " Pais: " << aerolinea.getPais() << endl;
 #pragma endregion
 #pragma  region Muestra todas las aerolíneas activas.
 
-        cout<<"--------------------------------------------------------Aerolíneas activas.--------------------------------------------------------------"<<endl;
+        cout<<endl<<"--------------------------Aerolíneas activas--------------------------"<<endl<<endl;
         VDinamico<Aerolinea*> vectorsito(vl.buscaAerolineasActiva());
         for (int i = 0; i < vectorsito.tamlog(); ++i) {
             string activo = " ";
             vectorsito[i]->isActivo() ? activo = "Si" : activo ="No";
-            cout<< "Id: "<< vectorsito[i]->getId() << " Nombre: "<< vectorsito[i]->getNombre()<< " Pais: " << vectorsito[i]->getPais() <<" Activo: "<< activo <<"\n"<<endl;
+            cout<< "Id: "<< vectorsito[i]->getId() << " Nombre: "<< vectorsito[i]->getNombre()<< " Pais: " << vectorsito[i]->getPais() <<" Activo: "<< activo <<endl;
 
         }
 
 #pragma endregion
 #pragma  region Busca todos los aeropuertos (origen) en los que opera Iberia Airlines, con icao IBE
-    cout<<"------------------------------Aeropuertos (origen) en los que opera Iberia Airlines-------------------------------"<<endl;
+    cout<<endl<<"------------------------------Aeropuertos (origen) en los que opera Iberia Airlines-------------------------------"<<endl<<endl;
     Aerolinea iberiaAirlines = vl.buscaAerolinea("IBE");
     VDinamico<Aeropuerto*> aeropuertosIbericos  =  iberiaAirlines.getAeropuertosOrig();
     for (int j = 0; j < aeropuertosIbericos.tamlog(); ++j) {
         cout<<"Id: "<<aeropuertosIbericos[j]->getId()<<" Aeropuerto: "<< aeropuertosIbericos[j]->getNombre() <<  " Iata : "
-            <<  aeropuertosIbericos[j]->getIata() << " Iso Pais: " << aeropuertosIbericos[j]->getIsoPais() << endl;
+            <<  aeropuertosIbericos[j]->getIata() << " Iso Pais: " << aeropuertosIbericos[j]->getIsoPais() <<endl;
 
     }
 
 #pragma  endregion
 #pragma  region   Busca todas las rutas operadas por Iberia Airlines con origen en el aeropuerto de Málaga(AGP).
-    cout<<"------------------------------ Rutas operadas por Iberia Airlines con origen en el aeropuerto de Málaga(AGP)------------------------------"<<endl;
+    cout<<endl<<"-----------------Rutas operadas por Iberia Airlines con origen en el aeropuerto de Málaga(AGP)-----------------"<<endl<<endl;
     //AeroRutasAGP
     VDinamico<Ruta*> aerorutasAGP = iberiaAirlines.getRutasAeropuerto("AGP");
     VDinamico<Ruta*> aerorutasMalaga;
@@ -183,16 +187,16 @@ int main(int argc, const char * argv[]) {
 
     }
     for (int i = 0; i < aerorutasMalaga.tamlog(); ++i) {
-        cout<<"Origen: "<<aerorutasMalaga[i]->getOrigin()->getNombre()<<"---> Destino: "<< aerorutasMalaga[i]->getDestination()->getNombre()  << endl;
+        cout<<"Origen: "<<aerorutasMalaga[i]->getOrigin()->getNombre()<<"---> Destino: "<< aerorutasMalaga[i]->getDestination()->getNombre() <<endl;
 
     }
 
 #pragma  endregion
 #pragma region Aerolíneas que operan en España.
-        cout<<"------------------------------Aerolíneas que operan en España------------------------------"<<endl;
+        cout<<endl<<"------------------------------Aerolíneas que operan en España------------------------------"<<endl<<endl;
             VDinamico<Aerolinea*> resAerolinea =  vl.getAerolineasPais("Spain");
             for (int i = 0; i < resAerolinea.tamlog(); ++i) {
-                cout<< "Id: "<< resAerolinea[i]->getId() << " Nombre: "<< resAerolinea[i]->getNombre()<< " Pais: " << resAerolinea[i]->getPais() <<"\n"<<endl;
+                cout<< "Id: "<< resAerolinea[i]->getId() << " Nombre: "<< resAerolinea[i]->getNombre()<< " Pais: " << resAerolinea[i]->getPais() <<endl;
             }
 
 
