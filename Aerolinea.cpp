@@ -90,57 +90,94 @@ bool  Aerolinea::operator>(const Aerolinea &orig) const {
     return (this->icao>orig.icao);
 
 }
-
+/**
+ * @brief Getter Id
+ * @return
+ */
 unsigned int Aerolinea::getId() const {
     return id;
 }
-
+/**
+ * @brief Setter Id
+ * @param id
+ */
 void Aerolinea::setId(unsigned int id) {
     Aerolinea::id = id;
 }
-
+/**
+ * @brief Getter Icao
+ * @return
+ */
 const string &Aerolinea::getIcao() const {
     return icao;
 }
+/**
+ * @brief Setter Icao
+ * @param icao
+ */
 
 void Aerolinea::setIcao(const string &icao) {
     Aerolinea::icao = icao;
 }
-
+/**
+ * @brief Getter Nombre
+ * @return
+ */
 const string &Aerolinea::getNombre() const {
     return nombre;
 }
+/**
+ * @brief Setter Nombre
+ * @param nombre
+ */
 
 void Aerolinea::setNombre(const string &nombre) {
     Aerolinea::nombre = nombre;
 }
-
+/**
+ * @brief Getter Pais
+ * @return
+ */
 const string &Aerolinea::getPais() const {
     return pais;
 }
-
+/**
+ * @brief Setter Pais
+ * @param pais
+ */
 void Aerolinea::setPais(const string &pais) {
     Aerolinea::pais = pais;
 }
-
+/**
+ * @brief Getter Activo
+ * @return
+ */
 bool Aerolinea::isActivo() const {
     return activo;
 }
-
+/**
+ * @brief Setter Activo
+ * @param activo
+ */
 void Aerolinea::setActivo(bool activo) {
     Aerolinea::activo = activo;
 }
-
+/**
+ * @brief Getter Con Acceso al private aerorutas
+ * @return
+ */
 const VDinamico<Ruta *> &Aerolinea::getAerorutas() const {
     return aerorutas;
 }
+/**
+ * @brief Setter AeroRutas
+ * @param aerorutas
+ */
 
 void Aerolinea::setAerorutas(const VDinamico<Ruta *> &aerorutas) {
     Aerolinea::aerorutas = aerorutas;
 }
-int Aerolinea::getTamaAeroRutas() {
-    return aerorutas.tamlog();
-}
+
 
 
 

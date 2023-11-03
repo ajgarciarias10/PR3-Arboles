@@ -2,6 +2,13 @@
 #define PRACTICA_3_AVL_H
 #include <string>
 #include <iostream>
+/**
+ * @file AVL.h
+ * @date 03/11/2023
+ * @author Antonio José Garcia Arias, ajga001@red.ujaen.es
+ * @author Abraham Garcia Hurtado, agh00040@red.ujaen.es
+ * @brief Clase Arboles Tipo AVL
+ */
 template<class T>
 class Nodo{
 public:

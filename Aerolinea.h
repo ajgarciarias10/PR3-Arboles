@@ -33,31 +33,29 @@ public:
     bool operator<(const Aerolinea &orig) const;
     //Operador>
     bool  operator>(const Aerolinea &orig) const;
-
-    int getTamaAeroRutas();
-
+    //Getter Id
     unsigned int getId() const;
-
+    //Setter Id
     void setId(unsigned int id);
-
+    //Getter Icao
     const string &getIcao() const;
-
+    //Setter Icao
     void setIcao(const string &icao);
-
+    //Getter Nombre
     const string &getNombre() const;
-
+    //Setter Nombre
     void setNombre(const string &nombre);
-
+    //Getter Pais
     const string &getPais() const;
-
+    //Setter Pais
     void setPais(const string &pais);
-
+    //Getter Activo
     bool isActivo() const;
-
+    //Setter Activo
     void setActivo(bool activo);
-
+    //Getter de variable privada aeroruta
     const VDinamico<Ruta *> &getAerorutas() const;
-
+    //Setter Aerorutas
     void setAerorutas(const VDinamico<Ruta *> &aerorutas);
 };
 

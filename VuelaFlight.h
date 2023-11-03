@@ -5,7 +5,13 @@
 #include "AVL.h"
 #ifndef PRACTICA_2_VUELAFLIGHT_H
 #define PRACTICA_2_VUELAFLIGHT_H
-
+/**
+ * @file VuelaFlight.h
+ * @date 03/11/2023
+ * @author Antonio José Garcia Arias, ajga001@red.ujaen.es
+ * @author Abraham Garcia Hurtado, agh00040@red.ujaen.es
+ * @brief Vuela Flight
+ */
 
 class VuelaFlight {
 private:
